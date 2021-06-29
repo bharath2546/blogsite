@@ -1,8 +1,11 @@
-const  App = () => {
+import TopBar from "./components/topbar/TopBar";
+
+
+const App = () => {
   return (
-    <div className="App">
-      Blog App
-    </div>
+    <>
+      <TopBar />
+    </>
   );
 }
 
