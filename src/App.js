@@ -9,8 +9,7 @@ import Register from "./pages/register/Register";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 const App = () => {

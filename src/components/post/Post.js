@@ -2,35 +2,24 @@ import React from 'react'
 import "./post.css";
 import { Link } from 'react-router-dom';
 
-export default function Post() {
+export default function Post({ post }) {
     return (
         <div className="post">
-            <img className="postImg" src="https://www.thefennvoice.org/.a/6a017d3e8f0065970c022ad3c481a6200d-pi" alt="" />
+            {post.photo && <img className="postImg" src={post.photo} alt="" />}
+            
             <div className="postInfo">
-                <div className="postCats">
-                    <span className="postCat">Music</span>
-                    <span className="postCat">Life</span>
+                <div className="postCats">{
+                    post.categories.map((c)=>(
+                        <span className="postCat">{ c.name }</span>
+                    ))}
                 </div>
-                <span className="postTitle"><Link to="/post/123" className="link">hello world</Link></span>
+                <Link to={`/post/${post._id}`} className="link"><span className="postTitle">{ post.title }</span></Link>
+                
                 <hr />
-                <span className="postDate">5 hour ago</span>
+                <span className="postDate">{new Date(post.createdAt).toDateString()}</span>
             </div>
             <p className="postDesc">
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
-                This is discription
+                {post.desc}
             </p>
         </div>
     )
