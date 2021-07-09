@@ -5,6 +5,8 @@ import Settings from "./pages/settings/Settings";
 import Single from "./pages/single/Single";
 import Write from "./pages/write/Write";
 import Register from "./pages/register/Register";
+import { Context } from './context/Context';
+import { useContext } from "react";
 
 import {
   BrowserRouter as Router,
@@ -14,7 +16,7 @@ import {
 
 const App = () => {
 
-  const user = true;
+  const { user } = useContext(Context);
 
   return (
     <Router>
@@ -24,10 +26,10 @@ const App = () => {
             <Home />
         </Route>
         <Route path="/register">
-          {user ? <Register />: <Home />}
+          {user ?  <Home />:<Register />}
         </Route>
         <Route path="/login">
-            {user ? <Login />:<Home />}
+            {user ? <Home />:<Login />}
         </Route>
         <Route path="/write">
             {user ? <Write />:<Login />}
