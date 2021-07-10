@@ -1,8 +1,56 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import "./settings.css";
 import Sidebar from "./../../components/sidebar/Sidebar";
+import { Context } from './../../context/Context';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Settings() {
+
+    const { user, dispatch } = useContext(Context);
+    const [file, setFile] = useState(null);
+    const PF = "http://localhost:5000/images/";
+    
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [success, setSuccess] = useState(false);
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch({ type: "UPDATE_START" });
+        const updatedUser = {
+            userId: user._id,
+            username,
+            email,
+            password
+        };
+
+        if (file) {
+            const data = new FormData();
+            const filename = Date.now() + file.name;
+            data.append("name", filename);
+            data.append("file", file);
+            updatedUser.profilePic = filename;
+            try {
+                await axios.post("/upload", data);
+                
+            }
+            catch (err) {
+            }
+        }
+        try {
+            const res = await axios.put("/users/" + user._id, updatedUser);
+            setSuccess(true);
+            dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+        }
+        catch (err) {
+            console.log(err);
+            dispatch({ type: "UPDATE_FAILURE" });
+        }
+
+    }
     return (
         <div className="settings">
             <div className="settingsWrapper">
@@ -10,12 +58,12 @@ export default function Settings() {
                     <span className="settingsUpdateTitle">Update your account</span>
                     <span className="settingsDeleteTitle">Delete your account</span>
                 </div>
-                <form className="settingsForm">
+                <form className="settingsForm" onSubmit={handleSubmit}>
                     <label>profile picture</label>
                     <div className="settingsPP">
                         <img
                             className="settingsPPImg"
-                            src="https://i.pinimg.com/474x/97/49/16/97491609b8a4380aa2f5f0954072d139.jpg"
+                            src={file ? URL.createObjectURL(file) :  PF+user.profilePic}
                             alt=""
                         />
                         <label htmlFor="fileInput">
@@ -25,6 +73,7 @@ export default function Settings() {
                             style={{display:"none"}}
                             type="file"
                             id="fileInput"
+                            onChange={e=>setFile(e.target.files[0])}
                         />
                     </div>
                     <label>
@@ -32,7 +81,8 @@ export default function Settings() {
                     </label>
                     <input
                         type="text"
-                        placeholder="mario"
+                        placeholder={user.username}
+                        onChange={(e)=>setUsername(e.target.value)}
                     />
 
                     <label>
@@ -40,7 +90,8 @@ export default function Settings() {
                     </label>
                     <input
                         type="email"
-                        placeholder="mario@gmail.com"
+                        placeholder={user.email}
+                        onChange={(e)=>setEmail(e.target.value)}
                     />
 
                     <label>
@@ -49,8 +100,12 @@ export default function Settings() {
                     <input
                         type="password"
                         placeholder="*****"
+                        onChange={(e)=>setPassword(e.target.value)}
                     />
-                    <button className="settingsButton">Update</button>
+                    <button className="settingsButton" type="submit">Update</button>
+                    {
+                        success && <span style={{color:"green", textAlign:"center", margin:"20px"}}>Profile has been updated</span>
+                    }
                 </form>
             </div>
             <Sidebar />

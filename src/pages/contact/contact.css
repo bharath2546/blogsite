@@ -1,0 +1,14 @@
+.contact {
+    margin: 0px;
+    padding: 0px;
+    background-color: lightslategrey;
+    height: 710px;
+    width: 100%;
+}
+
+.contactDesc {
+    padding: 150px;
+    text-align: center;
+    font-size: 50px;
+    color: green;
+}

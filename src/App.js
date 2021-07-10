@@ -7,12 +7,15 @@ import Write from "./pages/write/Write";
 import Register from "./pages/register/Register";
 import { Context } from './context/Context';
 import { useContext } from "react";
+import About from "./pages/about/About";
+import Contact from "./pages/contact/Contact";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+
 
 const App = () => {
 
@@ -37,9 +40,11 @@ const App = () => {
         <Route path="/settings">
             {user ? <Settings/>:<Login/>}
           </Route>
-          <Route path="/post/:postId">
+        <Route path="/post/:postId">
             <Single />
           </Route>
+        <Route path="/about"><About /></Route>
+        <Route path="/contact"><Contact /></Route>
       </Switch>
     </Router>
   );
